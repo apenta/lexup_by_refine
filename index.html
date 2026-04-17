@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LEXUP — Words That Work As Hard As You Do</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f2eb;
+    --acid: #c8ff00;
+    --coral: #ff5c3a;
+    --muted: #9e9e8a;
+    --card-bg: #141414;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--acid);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(200,255,0,0.4);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.35s ease, width 0.2s, height 0.2s;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.4rem 3rem;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(200,255,0,0.1);
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.15em;
+    color: var(--acid);
+  }
+
+  .logo span { color: var(--white); }
+
+  nav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--acid); }
+
+  .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+
+  .nav-cta {
+    background: var(--acid) !important;
+    color: var(--black) !important;
+    padding: 0.55rem 1.3rem;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 7rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,255,0,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,255,0,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(200,255,0,0.08) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    pointer-events: none;
+    animation: pulse 6s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.7; }
+  }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    color: var(--acid);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s forwards;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 13vw, 13rem);
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+    max-width: 900px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.4s forwards;
+  }
+
+  .hero h1 .outline {
+    -webkit-text-stroke: 2px var(--white);
+    color: transparent;
+  }
+
+  .hero h1 .accent { color: var(--acid); }
+
+  .hero-sub {
+    margin-top: 2.5rem;
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 500px;
+    line-height: 1.7;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.6s forwards;
+  }
+
+  .hero-sub strong { color: var(--white); font-weight: 500; }
+
+  .hero-cta-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 3rem;
+    align-items: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.8s forwards;
+  }
+
+  .btn-primary {
+    background: var(--acid);
+    color: var(--black);
+    padding: 1rem 2.2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: none;
+    cursor: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0 var(--coral);
+  }
+
+  .btn-ghost {
+    color: var(--white);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 2px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--acid); border-color: var(--acid); }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.6s 1.2s forwards;
+  }
+
+  .scroll-line {
+    width: 40px;
+    height: 1px;
+    background: var(--muted);
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    left: -100%; top: 0;
+    width: 100%; height: 100%;
+    background: var(--acid);
+    animation: slide 2s 1.5s infinite;
+  }
+  @keyframes slide {
+    to { left: 200%; }
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 1rem 0;
+    background: rgba(200,255,0,0.03);
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marquee 25s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee-track span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    padding: 0 2rem;
+  }
+
+  .marquee-track span.bright { color: var(--acid); }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ABOUT SECTION */
+  .about {
+    padding: 8rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--acid);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .about h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    margin-bottom: 2rem;
+  }
+
+  .about h2 em {
+    font-style: normal;
+    color: var(--acid);
+  }
+
+  .about p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 1.4rem;
+    font-weight: 300;
+  }
+
+  .about p strong { color: var(--white); font-weight: 500; }
+
+  /* FEATURES */
+  .features {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .feature-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 1.8rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .feature-card:hover {
+    border-color: rgba(200,255,0,0.3);
+    transform: translateX(6px);
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--acid);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s;
+  }
+  .feature-card:hover::before { transform: scaleY(1); }
+
+  .feature-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--acid);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.02em;
+  }
+
+  .feature-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* HOW IT WORKS */
+  .how {
+    padding: 8rem 3rem;
+    background: rgba(200,255,0,0.02);
+    border-top: 1px solid rgba(200,255,0,0.08);
+    border-bottom: 1px solid rgba(200,255,0,0.08);
+  }
+
+  .how-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .how h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 6rem);
+    line-height: 0.9;
+    margin-bottom: 4rem;
+    text-align: center;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    position: relative;
+  }
+
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 2.8rem;
+    left: 16%;
+    right: 16%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--acid), transparent);
+    opacity: 0.3;
+  }
+
+  .step {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    position: relative;
+  }
+
+  .step-icon {
+    width: 56px; height: 56px;
+    border: 1px solid rgba(200,255,0,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: var(--acid);
+    position: relative;
+    background: var(--black);
+    z-index: 1;
+  }
+
+  .step h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.04em;
+  }
+
+  .step p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* SAMPLE WORDS */
+  .words-section {
+    padding: 8rem 3rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .words-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 5vw, 5rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .words-section .sub {
+    color: var(--muted);
+    margin-bottom: 3.5rem;
+    font-size: 0.95rem;
+  }
+
+  .word-cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+  }
+
+  .word-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 2rem 1.5rem;
+    position: relative;
+    transition: transform 0.25s, border-color 0.25s;
+  }
+  .word-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(200,255,0,0.25);
+  }
+
+  .word-card .word {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.05em;
+    color: var(--acid);
+    margin-bottom: 0.3rem;
+  }
+
+  .word-card .pos {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--coral);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.8rem;
+  }
+
+  .word-card .def {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* SIGNUP / QUIZ SECTION */
+  .signup {
+    padding: 8rem 3rem;
+    background: linear-gradient(135deg, rgba(200,255,0,0.04) 0%, rgba(255,92,58,0.03) 100%);
+    border-top: 1px solid rgba(200,255,0,0.1);
+    text-align: center;
+  }
+
+  .signup-inner {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .signup h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 7vw, 7rem);
+    line-height: 0.88;
+    margin-bottom: 1rem;
+  }
+
+  .signup h2 span { color: var(--acid); }
+
+  .signup > .signup-inner > p {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+    font-weight: 300;
+  }
+
+  /* QUIZ FORM */
+  .quiz-form {
+    background: var(--card-bg);
+    border: 1px solid rgba(200,255,0,0.15);
+    padding: 0;
+    position: relative;
+    text-align: left;
+    overflow: hidden;
+  }
+
+  .quiz-progress-bar {
+    height: 3px;
+    background: rgba(200,255,0,0.1);
+    position: relative;
+  }
+  .quiz-progress-fill {
+    height: 100%;
+    background: var(--acid);
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .quiz-step {
+    display: none;
+    padding: 3rem 3rem 2.5rem;
+    animation: stepIn 0.35s ease forwards;
+  }
+  .quiz-step.active { display: block; }
+
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .quiz-step-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.28em;
+    color: var(--acid);
+    text-transform: uppercase;
+    margin-bottom: 0.9rem;
+  }
+
+  .quiz-question {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-hint {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 1.8rem;
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  /* Inputs */
+  .lx-input {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    padding: 1rem 1.2rem;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .lx-input:focus {
+    border-color: var(--acid);
+    background: rgba(200,255,0,0.04);
+  }
+  .lx-input::placeholder { color: rgba(158,158,138,0.5); }
+
+  .lx-select {
+    width: 100%;
+    background: rgba(255,255,255,0.04) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c8ff00' stroke-width='1.5' fill='none'/%3E%3C/svg%3E") no-repeat right 1.2rem center;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    padding: 1rem 3rem 1rem 1.2rem;
+    outline: none;
+    cursor: none;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+  .lx-select:focus { border-color: var(--acid); }
+  .lx-select option { background: #1a1a1a; color: var(--white); }
+
+  /* Days grid */
+  .days-group {
+    display: none;
+    margin-top: 1.5rem;
+    animation: stepIn 0.3s ease forwards;
+  }
+  .days-group.visible { display: block; }
+
+  .days-group-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.9rem;
+  }
+
+  .days-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .day-option {
+    position: relative;
+  }
+
+  .day-option input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+  .day-option label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px; height: 52px;
+    border: 1px solid rgba(255,255,255,0.1);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-transform: uppercase;
+    cursor: none;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+    user-select: none;
+  }
+
+  .day-option input:checked + label {
+    border-color: var(--acid);
+    color: var(--black);
+    background: var(--acid);
+    font-weight: 700;
+  }
+
+  .day-option label:hover {
+    border-color: rgba(200,255,0,0.5);
+    color: var(--acid);
+  }
+
+  /* Navigation */
+  .quiz-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem 2.5rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .btn-back {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    padding: 0;
+  }
+  .btn-back:hover { color: var(--white); }
+  .btn-back:disabled { opacity: 0; pointer-events: none; }
+
+  .btn-next {
+    background: var(--acid);
+    color: var(--black);
+    padding: 0.9rem 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: none;
+    cursor: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-next:hover {
+    transform: translate(-3px,-3px);
+    box-shadow: 5px 5px 0 var(--coral);
+  }
+  .btn-next:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .quiz-step-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+  }
+
+  /* Error */
+  .field-error {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--coral);
+    letter-spacing: 0.1em;
+    margin-top: 0.5rem;
+    display: none;
+  }
+  .field-error.show { display: block; }
+
+  /* Success */
+  .quiz-success {
+    display: none;
+    padding: 4rem 3rem;
+    text-align: center;
+    animation: stepIn 0.5s ease forwards;
+  }
+  .quiz-success.active { display: block; }
+
+  .success-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .quiz-success h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: var(--acid);
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+  }
+
+  .quiz-success p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  /* Webhook note */
+  .webhook-note {
+    margin-top: 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(158,158,138,0.35);
+    letter-spacing: 0.1em;
+    text-align: center;
+    padding: 0 3rem 1.5rem;
+  }
+
+  .form-corner {
+    position: absolute;
+    width: 14px; height: 14px;
+    border-color: var(--acid);
+    border-style: solid;
+  }
+  .form-corner.tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .form-corner.tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+  .form-corner.bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
+  .form-corner.br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+  /* FOOTER */
+  footer {
+    padding: 3rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  footer .logo { font-size: 1.3rem; }
+
+  footer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .about { grid-template-columns: 1fr; gap: 3rem; }
+    .steps { grid-template-columns: 1fr; }
+    .steps::before { display: none; }
+    .word-cards { grid-template-columns: repeat(2, 1fr); }
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    .hero { padding: 7rem 1.5rem 4rem; }
+    .about, .words-section { padding: 5rem 1.5rem; }
+    .how { padding: 5rem 1.5rem; }
+    .signup { padding: 5rem 1.5rem; }
+    footer { padding: 2rem 1.5rem; }
+  }
+
+  @media (max-width: 500px) {
+    .word-cards { grid-template-columns: 1fr; }
+    .nav-links a:not(.nav-cta) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="logo">LEX<span>UP</span></div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#how">How it works</a>
+    <a href="#words">Sample words</a>
+    <a href="#signup" class="nav-cta">Get early access</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+
+  <p class="eyebrow">✦ Vocab for the ambitious &nbsp;·&nbsp; Delivered to your inbox</p>
+  <h1>
+    WORDS<br/>
+    <span class="outline">THAT</span><br/>
+    <span class="accent">HIT.</span>
+  </h1>
+  <p class="hero-sub">
+    You're <strong>smart, driven, and going places</strong> — but if your vocabulary isn't keeping up, neither are your opportunities. LexUp delivers <strong>5 career-defining words</strong> straight to your inbox, on your schedule.
+  </p>
+  <div class="hero-cta-group">
+    <a href="#signup" class="btn-primary">Start leveling up →</a>
+    <a href="#how" class="btn-ghost">See how it works</a>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    scroll to explore
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>PERSPICACIOUS</span><span class="bright">✦</span>
+    <span>EFFICACIOUS</span><span class="bright">✦</span>
+    <span>SYCOPHANT</span><span class="bright">✦</span>
+    <span>EQUIVOCATE</span><span class="bright">✦</span>
+    <span>OBFUSCATE</span><span class="bright">✦</span>
+    <span>ZEITGEIST</span><span class="bright">✦</span>
+    <span>RECALCITRANT</span><span class="bright">✦</span>
+    <span>AMELIORATE</span><span class="bright">✦</span>
+    <span>PERSPICACIOUS</span><span class="bright">✦</span>
+    <span>EFFICACIOUS</span><span class="bright">✦</span>
+    <span>SYCOPHANT</span><span class="bright">✦</span>
+    <span>EQUIVOCATE</span><span class="bright">✦</span>
+    <span>OBFUSCATE</span><span class="bright">✦</span>
+    <span>ZEITGEIST</span><span class="bright">✦</span>
+    <span>RECALCITRANT</span><span class="bright">✦</span>
+    <span>AMELIORATE</span><span class="bright">✦</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="reveal">
+    <p class="section-label">// What is LexUp</p>
+    <h2>NOT YOUR <em>GRANDMA'S</em> WORD-OF-THE-DAY.</h2>
+    <p>
+      Other vocab apps give you <strong>"defenestration"</strong> and call it a day. Cool word. Completely useless at your next performance review.
+    </p>
+    <p>
+      LexUp is built differently. We curate <strong>words that actually matter</strong> in professional settings — the kind your boss uses, your competitors use, and frankly, the kind that make you sound like you belong in rooms you're still working your way into.
+    </p>
+    <p>
+      Tell us your industry, your goals, and how often you want to level up. We handle the rest — <strong>five words, a real-world article, and a quiz</strong> — delivered on your schedule. No fluff. No filler. Just vocabulary that works as hard as you do.
+    </p>
+  </div>
+
+  <div class="features reveal">
+    <div class="feature-card">
+      <div class="feature-num">01 //</div>
+      <div class="feature-title">Tailored to YOU</div>
+      <div class="feature-desc">Your field, your goals, your gap. We don't do generic — we do specific.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">02 //</div>
+      <div class="feature-title">5 Words Per Drop</div>
+      <div class="feature-desc">Enough to actually learn. Not so many you ghost us after week two.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">03 //</div>
+      <div class="feature-title">Words In The Wild</div>
+      <div class="feature-desc">A curated article featuring the hardest word in context. See it used. Get it.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">04 //</div>
+      <div class="feature-title">Quiz Yourself</div>
+      <div class="feature-desc">Retention is the whole point. A quick quiz to lock it in before you move on.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">05 //</div>
+      <div class="feature-title">Your Frequency</div>
+      <div class="feature-desc">Daily, weekly, whenever. You set the cadence. We show up on time.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="how-inner">
+    <p class="section-label" style="text-align:center;">// The process</p>
+    <h2 class="reveal">HOW IT <span style="color:var(--acid)">WORKS</span></h2>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-icon">1</div>
+        <h3>Tell us who you are</h3>
+        <p>Your industry, role, and vocab goals. Trying to break into finance? Pivot to tech? Gun for a promotion? We got you.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-icon">2</div>
+        <h3>Pick your cadence</h3>
+        <p>Daily grinder or weekly catch-up? Choose how often LexUp lands in your inbox. No judgment either way.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-icon">3</div>
+        <h3>Get smarter on schedule</h3>
+        <p>Five curated words, a real article, and a quiz — delivered like clockwork. Use them. Own them. Impress people.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SAMPLE WORDS -->
+<section class="words-section" id="words">
+  <p class="section-label">// Sample drop — Finance track</p>
+  <h2 class="reveal">THIS WEEK'S FIVE.</h2>
+  <p class="sub reveal">Words from a real LexUp drop for someone breaking into investment banking.</p>
+  <div class="word-cards">
+    <div class="word-card reveal">
+      <div class="word">ARBITRAGE</div>
+      <div class="pos">noun</div>
+      <div class="def">Exploiting price differences between markets to turn a profit. Your new favorite dinner party word.</div>
+    </div>
+    <div class="word-card reveal">
+      <div class="word">FIDUCIARY</div>
+      <div class="pos">adjective / noun</div>
+      <div class="def">Acting in someone else's best financial interest. Sounds like trust. Means accountability.</div>
+    </div>
+    <div class="word-card reveal">
+      <div class="word">LIQUIDITY</div>
+      <div class="pos">noun</div>
+      <div class="def">How fast an asset converts to cash. The word between "fine" and "actually thriving."</div>
+    </div>
+    <div class="word-card reveal">
+      <div class="word">AMORTIZE</div>
+      <div class="pos">verb</div>
+      <div class="def">Spreading costs over time. What your student loans are doing to your soul, but make it professional.</div>
+    </div>
+    <div class="word-card reveal">
+      <div class="word">SOLVENT</div>
+      <div class="pos">adjective</div>
+      <div class="def">Able to pay your debts. The bar is low but knowing the word raises yours.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNUP / QUIZ -->
+<section class="signup" id="signup">
+  <div class="signup-inner">
+    <p class="section-label">// Let's get personal</p>
+    <h2 class="reveal">MAKE IT <span>YOURS.</span></h2>
+    <p class="reveal">Five questions. Two minutes. A vocabulary game plan built specifically for where you're going — not where everyone else is stuck.</p>
+
+    <div class="quiz-form reveal" id="quizForm">
+      <div class="form-corner tl"></div>
+      <div class="form-corner tr"></div>
+      <div class="form-corner bl"></div>
+      <div class="form-corner br"></div>
+
+      <!-- Progress bar -->
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="progressFill" style="width:20%"></div>
+      </div>
+
+      <!-- STEP 1 -->
+      <div class="quiz-step active" id="step1">
+        <div class="quiz-step-label">// Question 01 of 05</div>
+        <div class="quiz-question">WHAT WORLD ARE YOU TRYING TO SPEAK?</div>
+        <div class="quiz-hint">Finance? Tech? Law? Healthcare? Don't overthink it — just tell us the vibe.</div>
+        <input type="text" class="lx-input" id="q1" placeholder="e.g. venture capital, UX design, healthcare policy..." autocomplete="off"/>
+        <div class="field-error" id="q1-error">// This field is optional — but we love the detail.</div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="quiz-step" id="step2">
+        <div class="quiz-step-label">// Question 02 of 05</div>
+        <div class="quiz-question">WHAT TITLE ARE YOU GUNNING FOR?</div>
+        <div class="quiz-hint">Current role, dream role, whatever. We'll tailor your drops to make you sound like you already have it.</div>
+        <input type="text" class="lx-input" id="q2" placeholder="e.g. Senior Product Manager, Investment Analyst..." autocomplete="off"/>
+        <div class="field-error" id="q2-error">// Required — tell us who you're becoming.</div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="quiz-step" id="step3">
+        <div class="quiz-step-label">// Question 03 of 05</div>
+        <div class="quiz-question">WHERE ARE YOU ON THE MAP?</div>
+        <div class="quiz-hint">Your experience level shapes which words will move the needle most for you right now.</div>
+        <select class="lx-select" id="q3">
+          <option value="" disabled selected>// Select your level</option>
+          <option value="student">Still in school / pre-career</option>
+          <option value="entry">Entry-level (0–2 years)</option>
+          <option value="intermediate">Intermediate (3–5 years)</option>
+          <option value="mid-senior">Mid-senior (6–9 years)</option>
+          <option value="advanced">Advanced (10+ years)</option>
+          <option value="pivoting">Career pivoting / switching fields</option>
+        </select>
+        <div class="field-error" id="q3-error">// Required — pick your level.</div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="quiz-step" id="step4">
+        <div class="quiz-step-label">// Question 04 of 05</div>
+        <div class="quiz-question">HOW OFTEN DO YOU WANT TO GET SMARTER?</div>
+        <div class="quiz-hint">No wrong answer — daily grinder or weekly catch-up, we'll be there.</div>
+        <select class="lx-select" id="q4" onchange="handleFrequency(this.value)">
+          <option value="" disabled selected>// Select your cadence</option>
+          <option value="daily">Daily — I don't mess around</option>
+          <option value="3x">3× per week — balanced and intentional</option>
+          <option value="weekly">Weekly — quality over quantity</option>
+        </select>
+        <div class="field-error" id="q4-error">// Required — pick your cadence.</div>
+
+        <!-- 3x per week: checkboxes -->
+        <div class="days-group" id="daysCheckboxGroup">
+          <div class="days-group-label">// Pick exactly 3 days</div>
+          <div class="days-grid">
+            <div class="day-option"><input type="checkbox" name="days3x" id="d3-mon" value="Monday"><label for="d3-mon">MON</label></div>
+            <div class="day-option"><input type="checkbox" name="days3x" id="d3-tue" value="Tuesday"><label for="d3-tue">TUE</label></div>
+            <div class="day-option"><input type="checkbox" name="days3x" id="d3-wed" value="Wednesday"><label for="d3-wed">WED</label></div>
+            <div class="day-option"><input type="checkbox" name="days3x" id="d3-thu" value="Thursday"><label for="d3-thu">THU</label></div>
+            <div class="day-option"><input type="checkbox" name="days3x" id="d3-fri" value="Friday"><label for="d3-fri">FRI</label></div>
+            <div class="day-option"><input type="checkbox" name="days3x" id="d3-sat" value="Saturday"><label for="d3-sat">SAT</label></div>
+            <div class="day-option"><input type="checkbox" name="days3x" id="d3-sun" value="Sunday"><label for="d3-sun">SUN</label></div>
+          </div>
+          <div class="field-error" id="days3x-error">// Pick exactly 3 days.</div>
+        </div>
+
+        <!-- Weekly: radio buttons -->
+        <div class="days-group" id="daysRadioGroup">
+          <div class="days-group-label">// Pick your day</div>
+          <div class="days-grid">
+            <div class="day-option"><input type="radio" name="days1x" id="d1-mon" value="Monday"><label for="d1-mon">MON</label></div>
+            <div class="day-option"><input type="radio" name="days1x" id="d1-tue" value="Tuesday"><label for="d1-tue">TUE</label></div>
+            <div class="day-option"><input type="radio" name="days1x" id="d1-wed" value="Wednesday"><label for="d1-wed">WED</label></div>
+            <div class="day-option"><input type="radio" name="days1x" id="d1-thu" value="Thursday"><label for="d1-thu">THU</label></div>
+            <div class="day-option"><input type="radio" name="days1x" id="d1-fri" value="Friday"><label for="d1-fri">FRI</label></div>
+            <div class="day-option"><input type="radio" name="days1x" id="d1-sat" value="Saturday"><label for="d1-sat">SAT</label></div>
+            <div class="day-option"><input type="radio" name="days1x" id="d1-sun" value="Sunday"><label for="d1-sun">SUN</label></div>
+          </div>
+          <div class="field-error" id="days1x-error">// Pick your day.</div>
+        </div>
+      </div>
+
+      <!-- STEP 5 -->
+      <div class="quiz-step" id="step5">
+        <div class="quiz-step-label">// Question 05 of 05</div>
+        <div class="quiz-question">WHERE DO WE SEND YOUR DROPS?</div>
+        <div class="quiz-hint">Your email. That's it. We're not here to spam you — we're here to make you dangerous.</div>
+        <input type="email" class="lx-input" id="q5" placeholder="you@yourdomain.com" autocomplete="email"/>
+        <div class="field-error" id="q5-error">// Required — and it has to be a real one.</div>
+      </div>
+
+      <!-- Success state -->
+      <div class="quiz-success" id="quizSuccess">
+        <div class="success-icon">✦</div>
+        <h3>YOU'RE IN.</h3>
+        <p>Your first drop is loading. Get ready to walk into every room sounding like you own it. Check your inbox — something good is coming.</p>
+      </div>
+
+      <!-- Nav -->
+      <div class="quiz-nav" id="quizNav">
+        <button class="btn-back" id="btnBack" onclick="prevStep()" disabled>← Back</button>
+        <span class="quiz-step-count" id="stepCount">01 / 05</span>
+        <button class="btn-next" id="btnNext" onclick="nextStep()">Next →</button>
+      </div>
+    </div>
+
+    <div class="webhook-note" id="webhookNote">
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">LEX<span>UP</span></div>
+  <p>© 2025 LEXUP — WORDS THAT WORK AS HARD AS YOU DO</p>
+  <p>BUILT FOR THE ONES GOING PLACES.</p>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
+  });
+
+  function animateRing() {
+    rx += (mx - rx - 18) * 0.12;
+    ry += (my - ry - 18) * 0.12;
+    ring.style.transform = `translate(${rx}px, ${ry}px)`;
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  function refreshCursorTargets() {
+    document.querySelectorAll('a, button, .feature-card, .word-card, .day-option label, select').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        ring.style.width = '52px';
+        ring.style.height = '52px';
+      });
+      el.addEventListener('mouseleave', () => {
+        ring.style.width = '36px';
+        ring.style.height = '36px';
+      });
+    });
+  }
+  refreshCursorTargets();
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // ─── QUIZ LOGIC ───────────────────────────────────────────────────────────────
+  let currentStep = 1;
+  const totalSteps = 5;
+
+  function showStep(n) {
+    document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
+    document.getElementById(`step${n}`).classList.add('active');
+    document.getElementById('progressFill').style.width = `${(n / totalSteps) * 100}%`;
+    document.getElementById('stepCount').textContent = `0${n} / 0${totalSteps}`;
+    document.getElementById('btnBack').disabled = n === 1;
+    document.getElementById('btnNext').textContent = n === totalSteps ? 'Submit →' : 'Next →';
+  }
+
+  function clearError(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('show');
+  }
+  function showError(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('show');
+  }
+
+  function validateStep(n) {
+    if (n === 1) return true; // optional
+    if (n === 2) {
+      const v = document.getElementById('q2').value.trim();
+      if (!v) { showError('q2-error'); return false; }
+      return true;
+    }
+    if (n === 3) {
+      const v = document.getElementById('q3').value;
+      if (!v) { showError('q3-error'); return false; }
+      return true;
+    }
+    if (n === 4) {
+      const freq = document.getElementById('q4').value;
+      if (!freq) { showError('q4-error'); return false; }
+      if (freq === '3x') {
+        const checked = document.querySelectorAll('input[name="days3x"]:checked');
+        if (checked.length !== 3) { showError('days3x-error'); return false; }
+      }
+      if (freq === 'weekly') {
+        const checked = document.querySelector('input[name="days1x"]:checked');
+        if (!checked) { showError('days1x-error'); return false; }
+      }
+      return true;
+    }
+    if (n === 5) {
+      const v = document.getElementById('q5').value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!v || !emailRegex.test(v)) { showError('q5-error'); return false; }
+      return true;
+    }
+    return true;
+  }
+
+  function nextStep() {
+    clearError(`q${currentStep}-error`);
+    clearError('days3x-error');
+    clearError('days1x-error');
+    if (!validateStep(currentStep)) return;
+    if (currentStep < totalSteps) {
+      currentStep++;
+      showStep(currentStep);
+    } else {
+      submitForm();
+    }
+  }
+
+  function prevStep() {
+    if (currentStep > 1) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  }
+
+  function handleFrequency(val) {
+    clearError('days3x-error');
+    clearError('days1x-error');
+    document.getElementById('daysCheckboxGroup').classList.toggle('visible', val === '3x');
+    document.getElementById('daysRadioGroup').classList.toggle('visible', val === 'weekly');
+    // enforce max 3 checkboxes
+    document.querySelectorAll('input[name="days3x"]').forEach(cb => {
+      cb.addEventListener('change', enforcMax3);
+    });
+  }
+
+  function enforcMax3() {
+    const checked = document.querySelectorAll('input[name="days3x"]:checked');
+    if (checked.length > 3) {
+      this.checked = false;
+    }
+  }
+
+  function getSelectedDays() {
+    const freq = document.getElementById('q4').value;
+    if (freq === '3x') {
+      return Array.from(document.querySelectorAll('input[name="days3x"]:checked')).map(c => c.value).join(', ');
+    }
+    if (freq === 'weekly') {
+      const checked = document.querySelector('input[name="days1x"]:checked');
+      return checked ? checked.value : '';
+    }
+    return freq === 'daily' ? 'Every day' : '';
+  }
+
+// REPLACE the fetch call in submitForm() with this:
+async function submitForm() {
+    const payload = {
+        vocab_area:    document.getElementById('q1').value.trim() || 'Not specified',
+        job_title:     document.getElementById('q2').value.trim(),
+        experience:    document.getElementById('q3').value,
+        frequency:     document.getElementById('q4').value,
+        delivery_days: getSelectedDays(),
+        email:         document.getElementById('q5').value.trim(),
+        submitted_at:  new Date().toISOString(),
+    };
+
+    // Step 1 — save to Airtable via your backend (token stays safe)
+    await fetch("/submit", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+    });
+
+    // Step 2 — send to Stripe with email prefilled
+    const email = encodeURIComponent(payload.email);
+    window.location.href = `https://buy.stripe.com/YOUR_LINK?prefilled_email=${email}`;
+}
+</script>
+</body>
+</html>
