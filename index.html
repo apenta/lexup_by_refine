@@ -1326,16 +1326,16 @@ async function submitForm() {
     };
 
     // Step 1 — save to Airtable via your backend (token stays safe)
-    await fetch("/submit", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(payload)
+    const res = await fetch("/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
     });
 
-    // Step 2 — send to Stripe with email prefilled
-    const email = encodeURIComponent(payload.email);
-    window.location.href = `https://buy.stripe.com/YOUR_LINK?prefilled_email=${email}`;
-}
+    const data = await res.json();
+
+    // redirect user to Stripe checkout
+    window.location.href = data.checkout_url;
 </script>
 </body>
 </html>
