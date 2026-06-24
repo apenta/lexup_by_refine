@@ -3,6 +3,8 @@ from flask import Flask, request, jsonify, send_file
 import requests
 import stripe
 import os
+from flask_cors import CORS
+CORS(app)
 
 app = Flask(__name__)
 

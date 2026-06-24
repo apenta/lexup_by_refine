@@ -1345,17 +1345,23 @@ async function submitForm() {
     submitted_at: new Date().toISOString()
   };
 
-  const res = await fetch("/submit", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
+  try {
+    const res = await fetch("https://lexup-by-refine.onrender.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  window.location.href = data.checkout_url;
+    if (data.checkout_url) {
+      window.location.href = data.checkout_url;
+    } else {
+      console.error("No checkout URL returned:", data);
+    }
+  } catch (err) {
+    console.error("Submission error:", err);
+  }
 }
 </script>
 </body>

@@ -2,3 +2,4 @@ flask
 stripe
 requests
 gunicorn
+flask_cors
