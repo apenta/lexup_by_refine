@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 import requests
 import stripe
 import os
@@ -17,6 +17,10 @@ HEADERS = {
     "Authorization": f"Bearer {AIRTABLE_TOKEN}",
     "Content-Type": "application/json"
 }
+
+@app.route("/")
+def index():
+    return send_file("index.html")
 
 # ── Route 1: Receive quiz data and create Stripe Checkout Session ──
 @app.route("/submit", methods=["POST"])
