@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 AIRTABLE_ID = os.environ.get("AIRTABLE_ID")
-AIRTABLE_URL = f"https://api.airtable.com/v0/{AIRTABLE_ID}/user_input"
+AIRTABLE_URL = f"https://api.airtable.com/v0/{"AIRTABLE_ID"}/Table%201"
 AIRTABLE_TOKEN = os.environ.get("AIRTABLE_TOKEN")
 STRIPE_SECRET = os.environ.get("STRIPE_SECRET")
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET")
