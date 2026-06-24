@@ -32,6 +32,7 @@ def submit():
 
     # 1. Save to Airtable
     airtable_payload = {
+        "typecast": True,
         "fields": {
             "email": data.get("email"),
             "vocab_area": data.get("vocab_area"),
