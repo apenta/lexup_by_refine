@@ -4,9 +4,10 @@ import requests
 import stripe
 import os
 from flask_cors import CORS
-CORS(app)
+
 
 app = Flask(__name__)
+CORS(app)
 
 AIRTABLE_ID = os.environ.get("AIRTABLE_ID")
 AIRTABLE_URL = f"https://api.airtable.com/v0/{AIRTABLE_ID}/user_input"
