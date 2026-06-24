@@ -65,6 +65,10 @@ def submit():
             line_items=[{
                 "price": "price_1TNE5VBSOHSMgYjBGosxns22",
                 "quantity": 1
+            },
+            {
+                "price": "price_1TNE4yBSOHSMgYjBGFctq6dl",
+                "quantity": 1
             }],                                         # ← closed the list
             success_url="https://lexup-by-refine.onrender.com/success?session_id={CHECKOUT_SESSION_ID}",
             cancel_url="https://lexup-by-refine.onrender.com/cancel",
