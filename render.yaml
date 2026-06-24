@@ -3,7 +3,7 @@ services:
     name: my-flask-app
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --pythonpath src/lexup_by_refine app:app
+    startCommand: gunicorn --chdir src app:app
     envVars:
       - key: STRIPE_SECRET
         sync: true
