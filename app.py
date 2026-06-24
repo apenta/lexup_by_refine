@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 AIRTABLE_ID = os.environ.get("AIRTABLE_ID")
-AIRTABLE_URL = f"https://api.airtable.com/v0/{"AIRTABLE_ID"}/Table%201"
+AIRTABLE_URL = f"https://api.airtable.com/v0/{AIRTABLE_ID}/Table%201"
 AIRTABLE_TOKEN = os.environ.get("AIRTABLE_TOKEN")
 STRIPE_SECRET = os.environ.get("STRIPE_SECRET")
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET")
@@ -49,7 +49,10 @@ def submit():
         }
     }
 
+    print("STEP 1: before airtable")
     response = requests.post(AIRTABLE_URL, headers=HEADERS, json=airtable_payload)
+    print("STEP 2: airtable status", response.status_code, response.text)
+
     if response.status_code not in [200, 201]:
         return jsonify({"error": response.text}), 500
 
