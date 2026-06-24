@@ -40,7 +40,11 @@ def submit():
             "frequency": data.get("frequency"),
             "delivery_days": data.get("delivery_days"),
             "submitted_at": data.get("submitted_at"),
-            "subscription_status": "pending"
+            "stripe_customer_id": data.get("stripe_customer_id"),
+            "subscription_status": "pending",
+            "trial_start": data.get("trial_start"),
+            "trial_end": data.get("trial_end"),
+            "plan": data.get("plan"),
         }
     }
 
