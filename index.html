@@ -876,7 +876,7 @@
     <a href="#about">About</a>
     <a href="#how">How it works</a>
     <a href="#words">Sample words</a>
-    <a href="#signup" class="nav-cta">Get early access</a>
+    <a href="#signup" class="nav-cta">Join LexUp</a>
   </div>
 </nav>
 
@@ -939,7 +939,7 @@
       LexUp is built differently. We curate <strong>words that actually matter</strong> in professional settings — the kind your boss uses, your competitors use, and frankly, the kind that make you sound like you belong in rooms you're still working your way into.
     </p>
     <p>
-      Tell us your industry, your goals, and how often you want to level up. We handle the rest — <strong>five words, a real-world article, and a quiz</strong> — delivered on your schedule. No fluff. No filler. Just vocabulary that works as hard as you do.
+      Tell us your industry, your goals, and how often you want to level up. We handle the rest — <strong>five words, a real-world article, and a crossword puzzle</strong> — delivered on your schedule. No fluff. No filler. Just vocabulary that works as hard as you do.
     </p>
   </div>
 
@@ -961,8 +961,9 @@
     </div>
     <div class="feature-card">
       <div class="feature-num">04 //</div>
-      <div class="feature-title">Quiz Yourself</div>
-      <div class="feature-desc">Retention is the whole point. A quick quiz to lock it in before you move on.</div>
+      <div class="feature-title">Crossword Reinforcement</div>
+      <div class="feature-desc">
+        Learning sticks when you use it. Every drop includes a quick crossword puzzle built around your new vocabulary.</div>
     </div>
     <div class="feature-card">
       <div class="feature-num">05 //</div>
@@ -991,7 +992,7 @@
       <div class="step reveal">
         <div class="step-icon">3</div>
         <h3>Get smarter on schedule</h3>
-        <p>Five curated words, a real article, and a quiz — delivered like clockwork. Use them. Own them. Impress people.</p>
+        <p>Five curated words, a real article, and a crossword puzzle designed to reinforce what you learned — delivered like clockwork.</p>
       </div>
     </div>
   </div>
@@ -1000,8 +1001,27 @@
 <!-- SAMPLE WORDS -->
 <section class="words-section" id="words">
   <p class="section-label">// Sample drop — Finance track</p>
-  <h2 class="reveal">THIS WEEK'S FIVE.</h2>
-  <p class="sub reveal">Words from a real LexUp drop for someone breaking into investment banking.</p>
+  <h2 class="reveal">WHAT A LEXUP EMAIL LOOKS LIKE.</h2>
+  <p class="sub reveal">
+  Each delivery includes five curated words, practical definitions,
+  a real-world article recommendation, and a crossword puzzle that helps
+  lock the vocabulary into memory.</p>
+  <div style="
+    background:#141414;
+    border:1px solid rgba(200,255,0,.15);
+    padding:1rem 1.5rem;
+    margin-bottom:2rem;
+    font-family:'Space Mono', monospace;
+    font-size:.75rem;
+    ">
+
+    FROM: LEXUP<br>
+    TRACK: INVESTMENT BANKING<br>
+    TODAY'S FOCUS: MARKET TERMINOLOGY<br>
+    ARTICLE: "The Future of Private Equity"<br>
+    REINFORCEMENT: Crossword Puzzle Included
+
+    </div>
   <div class="word-cards">
     <div class="word-card reveal">
       <div class="word">ARBITRAGE</div>
@@ -1131,8 +1151,8 @@
       <!-- STEP 5 -->
       <div class="quiz-step" id="step5">
         <div class="quiz-step-label">// Question 05 of 05</div>
-        <div class="quiz-question">WHERE DO WE SEND YOUR DROPS?</div>
-        <div class="quiz-hint">Your email. That's it. We're not here to spam you — we're here to make you dangerous.</div>
+        <div class="quiz-question">WHERE SHOULD WE SEND YOUR FIRST DROP?</div>
+        <div class="quiz-hint">Enter your email to create your LexUp account and start your subscription.</div>
         <input type="email" class="lx-input" id="q5" placeholder="you@yourdomain.com" autocomplete="email"/>
         <div class="field-error" id="q5-error">// Required — and it has to be a real one.</div>
       </div>
@@ -1315,27 +1335,28 @@
 
 // REPLACE the fetch call in submitForm() with this:
 async function submitForm() {
-    const payload = {
-        vocab_area:    document.getElementById('q1').value.trim() || 'Not specified',
-        job_title:     document.getElementById('q2').value.trim(),
-        experience:    document.getElementById('q3').value,
-        frequency:     document.getElementById('q4').value,
-        delivery_days: getSelectedDays(),
-        email:         document.getElementById('q5').value.trim(),
-        submitted_at:  new Date().toISOString(),
-    };
+  const payload = {
+    vocab_area: document.getElementById('q1').value.trim() || 'Not specified',
+    job_title: document.getElementById('q2').value.trim(),
+    experience: document.getElementById('q3').value,
+    frequency: document.getElementById('q4').value,
+    delivery_days: getSelectedDays(),
+    email: document.getElementById('q5').value.trim(),
+    submitted_at: new Date().toISOString()
+  };
 
-    // Step 1 — save to Airtable via your backend (token stays safe)
-    const res = await fetch("/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
-    });
+  const res = await fetch("/submit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    // redirect user to Stripe checkout
-    window.location.href = data.checkout_url;
+  window.location.href = data.checkout_url;
+}
 </script>
 </body>
 </html>
