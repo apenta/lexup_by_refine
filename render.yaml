@@ -1,15 +1,22 @@
 services:
   - type: web
-    name: my-flask-app
+    name: lexup-by-refine
     runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
+      - key: SITE_URL
+        value: https://lexup-by-refine.onrender.com
+      # Secrets and IDs: set the values in the Render dashboard (Environment tab).
       - key: STRIPE_SECRET
-        sync: true
+        sync: false
       - key: STRIPE_WEBHOOK_SECRET
-        sync: true
+        sync: false
+      - key: STRIPE_PRICE_MONTHLY
+        sync: false
+      - key: STRIPE_PRICE_YEARLY
+        sync: false
       - key: AIRTABLE_TOKEN
-        sync: trues
+        sync: false
       - key: AIRTABLE_ID
-        sync: true
+        sync: false

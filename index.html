@@ -692,6 +692,46 @@
     color: var(--acid);
   }
 
+  /* Plan picker */
+  .plan-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .plan-option { position: relative; }
+  .plan-option input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .plan-option label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1.2rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    font-family: 'Space Mono', monospace;
+    color: var(--muted);
+    cursor: none;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+    user-select: none;
+  }
+  .plan-option .plan-name {
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .plan-option .plan-price {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.25rem;
+    color: var(--white);
+  }
+  .plan-option label:hover { border-color: rgba(200,255,0,0.5); }
+  .plan-option input:checked + label {
+    border-color: var(--acid);
+    background: rgba(200,255,0,0.06);
+    color: var(--acid);
+  }
+  .plan-option input:focus-visible + label { outline: 1px solid var(--acid); outline-offset: 2px; }
+  @media (max-width: 480px) { .plan-options { grid-template-columns: 1fr; } }
+
   /* Navigation */
   .quiz-nav {
     display: flex;
@@ -1056,7 +1096,7 @@
   <div class="signup-inner">
     <p class="section-label">// Let's get personal</p>
     <h2 class="reveal">MAKE IT <span>YOURS.</span></h2>
-    <p class="reveal">Five questions. Two minutes. A vocabulary game plan built specifically for where you're going — not where everyone else is stuck.</p>
+    <p class="reveal">Six quick steps. Two minutes. A vocabulary game plan built specifically for where you're going — not where everyone else is stuck.</p>
 
     <div class="quiz-form reveal" id="quizForm">
       <div class="form-corner tl"></div>
@@ -1071,7 +1111,7 @@
 
       <!-- STEP 1 -->
       <div class="quiz-step active" id="step1">
-        <div class="quiz-step-label">// Question 01 of 05</div>
+        <div class="quiz-step-label">// Question 01 of 06</div>
         <div class="quiz-question">WHAT WORLD ARE YOU TRYING TO SPEAK?</div>
         <div class="quiz-hint">Finance? Tech? Law? Healthcare? Don't overthink it — just tell us the vibe.</div>
         <input type="text" class="lx-input" id="q1" placeholder="e.g. venture capital, UX design, healthcare policy..." autocomplete="off"/>
@@ -1080,7 +1120,7 @@
 
       <!-- STEP 2 -->
       <div class="quiz-step" id="step2">
-        <div class="quiz-step-label">// Question 02 of 05</div>
+        <div class="quiz-step-label">// Question 02 of 06</div>
         <div class="quiz-question">WHAT TITLE ARE YOU GUNNING FOR?</div>
         <div class="quiz-hint">Current role, dream role, whatever. We'll tailor your drops to make you sound like you already have it.</div>
         <input type="text" class="lx-input" id="q2" placeholder="e.g. Senior Product Manager, Investment Analyst..." autocomplete="off"/>
@@ -1089,7 +1129,7 @@
 
       <!-- STEP 3 -->
       <div class="quiz-step" id="step3">
-        <div class="quiz-step-label">// Question 03 of 05</div>
+        <div class="quiz-step-label">// Question 03 of 06</div>
         <div class="quiz-question">WHERE ARE YOU ON THE MAP?</div>
         <div class="quiz-hint">Your experience level shapes which words will move the needle most for you right now.</div>
         <select class="lx-select" id="q3">
@@ -1106,7 +1146,7 @@
 
       <!-- STEP 4 -->
       <div class="quiz-step" id="step4">
-        <div class="quiz-step-label">// Question 04 of 05</div>
+        <div class="quiz-step-label">// Question 04 of 06</div>
         <div class="quiz-question">HOW OFTEN DO YOU WANT TO GET SMARTER?</div>
         <div class="quiz-hint">No wrong answer — daily grinder or weekly catch-up, we'll be there.</div>
         <select class="lx-select" id="q4" onchange="handleFrequency(this.value)">
@@ -1150,11 +1190,29 @@
 
       <!-- STEP 5 -->
       <div class="quiz-step" id="step5">
-        <div class="quiz-step-label">// Question 05 of 05</div>
+        <div class="quiz-step-label">// Question 05 of 06</div>
         <div class="quiz-question">WHERE SHOULD WE SEND YOUR FIRST DROP?</div>
         <div class="quiz-hint">Enter your email to create your LexUp account and start your subscription.</div>
         <input type="email" class="lx-input" id="q5" placeholder="you@yourdomain.com" autocomplete="email"/>
         <div class="field-error" id="q5-error">// Required — and it has to be a real one.</div>
+      </div>
+
+      <!-- STEP 6 -->
+      <div class="quiz-step" id="step6">
+        <div class="quiz-step-label">// Question 06 of 06</div>
+        <div class="quiz-question">PICK YOUR PLAN.</div>
+        <div class="quiz-hint">You'll confirm payment securely with Stripe on the next page.</div>
+        <div class="plan-options">
+          <div class="plan-option">
+            <input type="radio" name="plan" id="plan-monthly" value="monthly">
+            <label for="plan-monthly"><span class="plan-name">Monthly</span><span class="plan-price" id="price-monthly">&nbsp;</span></label>
+          </div>
+          <div class="plan-option">
+            <input type="radio" name="plan" id="plan-yearly" value="yearly">
+            <label for="plan-yearly"><span class="plan-name">Yearly</span><span class="plan-price" id="price-yearly">&nbsp;</span></label>
+          </div>
+        </div>
+        <div class="field-error" id="q6-error">// Pick a plan to continue.</div>
       </div>
 
       <!-- Success state -->
@@ -1179,7 +1237,7 @@
 
 <footer>
   <div class="logo">LEX<span>UP</span></div>
-  <p>© 2025 LEXUP — WORDS THAT WORK AS HARD AS YOU DO</p>
+  <p>© 2026 LEXUP — WORDS THAT WORK AS HARD AS YOU DO</p>
   <p>BUILT FOR THE ONES GOING PLACES.</p>
 </footer>
 
@@ -1229,7 +1287,7 @@
 
   // ─── QUIZ LOGIC ───────────────────────────────────────────────────────────────
   let currentStep = 1;
-  const totalSteps = 5;
+  const totalSteps = 6;
 
   function showStep(n) {
     document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
@@ -1278,6 +1336,14 @@
       const v = document.getElementById('q5').value.trim();
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!v || !emailRegex.test(v)) { showError('q5-error'); return false; }
+      return true;
+    }
+    if (n === 6) {
+      if (!document.querySelector('input[name="plan"]:checked')) {
+        document.getElementById('q6-error').textContent = '// Pick a plan to continue.';
+        showError('q6-error');
+        return false;
+      }
       return true;
     }
     return true;
@@ -1333,8 +1399,31 @@
     return freq === 'daily' ? 'Every day' : '';
   }
 
-// REPLACE the fetch call in submitForm() with this:
+// ─── PLAN PRICES (loaded from Stripe via the backend) ───────────────────────
+const API_BASE = "https://lexup-by-refine.onrender.com";
+
+function formatPrice(p) {
+  const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: p.currency.toUpperCase() })
+    .format(p.amount / 100);
+  return `${money} / ${p.interval}`;
+}
+
+async function loadPlans() {
+  try {
+    const res = await fetch(`${API_BASE}/plans`);
+    const plans = await res.json();
+    for (const key of ['monthly', 'yearly']) {
+      if (plans[key]) document.getElementById(`price-${key}`).textContent = formatPrice(plans[key]);
+    }
+  } catch (err) {
+    console.error("Could not load plan prices:", err);
+  }
+}
+loadPlans();
+
 async function submitForm() {
+  const btn = document.getElementById('btnNext');
+  const errEl = document.getElementById('q6-error');
   const payload = {
     vocab_area: document.getElementById('q1').value.trim() || 'Not specified',
     job_title: document.getElementById('q2').value.trim(),
@@ -1342,11 +1431,14 @@ async function submitForm() {
     frequency: document.getElementById('q4').value,
     delivery_days: getSelectedDays(),
     email: document.getElementById('q5').value.trim(),
+    plan: document.querySelector('input[name="plan"]:checked').value,
     submitted_at: new Date().toISOString()
   };
 
+  btn.disabled = true;               // one click = one Airtable row
+  btn.textContent = 'Working…';
   try {
-    const res = await fetch("https://lexup-by-refine.onrender.com/submit", {
+    const res = await fetch(`${API_BASE}/submit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -1356,12 +1448,17 @@ async function submitForm() {
 
     if (data.checkout_url) {
       window.location.href = data.checkout_url;
-    } else {
-      console.error("No checkout URL returned:", data);
+      return;
     }
+    console.error("No checkout URL returned:", data);
+    errEl.textContent = '// ' + (data.error || 'Something went wrong. Please try again.');
   } catch (err) {
     console.error("Submission error:", err);
+    errEl.textContent = '// Could not reach the server. Please try again.';
   }
+  errEl.classList.add('show');
+  btn.disabled = false;
+  btn.textContent = 'Submit →';
 }
 </script>
 </body>
