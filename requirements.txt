@@ -3,3 +3,4 @@ stripe>=9
 requests
 gunicorn
 flask_cors
+tzdata

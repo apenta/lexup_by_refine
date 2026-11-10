@@ -20,3 +20,27 @@ services:
         sync: true
       - key: AIRTABLE_ID
         sync: true
+
+  # Daily email job. Render cron schedules run in UTC: 12:00 UTC = 7am EST / 8am EDT.
+  # (Cron jobs have their own environment, so set these values on this service too.)
+  - type: cron
+    name: lexup-daily-drop
+    runtime: python
+    schedule: "0 12 * * *"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python daily_job.py
+    envVars:
+      - key: TIMEZONE
+        value: America/New_York
+      - key: AIRTABLE_TOKEN
+        sync: true
+      - key: AIRTABLE_ID
+        sync: true
+      - key: RESEND_API_KEY
+        sync: true
+      - key: EMAIL_FROM
+        sync: true
+      - key: EMAIL_REPLY_TO
+        sync: true
+      - key: ANTHROPIC_API_KEY
+        sync: true
