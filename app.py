@@ -69,11 +69,17 @@ def submit():
             {
                 "price": "price_1TNE4yBSOHSMgYjBGFctq6dl",
                 "quantity": 1
-            }],                                         # ← closed the list
+            }],
             success_url="https://lexup-by-refine.onrender.com/success?session_id={CHECKOUT_SESSION_ID}",
             cancel_url="https://lexup-by-refine.onrender.com/cancel",
         )
-    except stripe.error.StripeError as e:
+    except stripe.StripeError as e:
+        # Newer versions of the stripe package (v9+) removed the
+        # stripe.error module - exceptions now live directly on `stripe`
+        # (stripe.StripeError, stripe.CardError, stripe.InvalidRequestError,
+        # etc). Using stripe.error.StripeError here would itself raise an
+        # AttributeError/ModuleNotFoundError and hide the real Stripe error.
+        print("STEP 3: stripe error:", str(e))
         return jsonify({"error": str(e)}), 500
 
     # 3. Return Stripe checkout URL to frontend
@@ -90,7 +96,7 @@ def webhook():
         event = stripe.Webhook.construct_event(
             payload, sig_header, STRIPE_WEBHOOK_SECRET
         )
-    except stripe.error.SignatureVerificationError:
+    except stripe.SignatureVerificationError:
         return jsonify({"error": "Invalid signature"}), 400
 
     # Handle successful subscription payment
