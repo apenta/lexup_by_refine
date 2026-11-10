@@ -9,14 +9,14 @@ services:
         value: https://lexup-by-refine.onrender.com
       # Secrets and IDs: set the values in the Render dashboard (Environment tab).
       - key: STRIPE_SECRET
-        sync: false
+        sync: true
       - key: STRIPE_WEBHOOK_SECRET
-        sync: false
+        sync: true
       - key: STRIPE_PRICE_MONTHLY
-        sync: false
+        sync: true
       - key: STRIPE_PRICE_YEARLY
-        sync: false
+        sync: true
       - key: AIRTABLE_TOKEN
-        sync: false
+        sync: true
       - key: AIRTABLE_ID
-        sync: false
+        sync: true
